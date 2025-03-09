@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+        .stopwatch {
+            font-size: 2em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .buttons button {
+            font-size: 1em;
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .start { background-color: #28a745; color: white; }
+        .stop { background-color: #dc3545; color: white; }
+        .reset { background-color: #ffc107; color: black; }
+        .lap { background-color: #007bff; color: white; }
+        button:hover {
+            opacity: 0.8;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        li {
+            background: #fff;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stopwatch</h1>
+        <div class="stopwatch">00:00:00</div>
+        <div class="buttons">
+            <button class="start" onclick="start()">Start</button>
+            <button class="stop" onclick="stop()">Stop</button>
+            <button class="reset" onclick="reset()">Reset</button>
+            <button class="lap" onclick="lap()">Lap</button>
+        </div>
+        <h2>Lap Times</h2>
+        <ul id="laps"></ul>
+    </div>
+
+    <script>
+        let [s, m, h] = [0, 0, 0], timer;
+        const display = document.querySelector(".stopwatch"), laps = document.getElementById("laps");
+
+        function formatTime() {
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function start() {
+            if (!timer) timer = setInterval(() => {
+                s = (s + 1) % 60; if (!s) m = (m + 1) % 60, h += !m ? 1 : 0;
+                display.textContent = formatTime();
+            }, 1000);
+        }
+
+        function stop() { clearInterval(timer); timer = null; }
+        function reset() { stop(); [s, m, h] = [0, 0, 0]; display.textContent = "00:00:00"; laps.innerHTML = ""; }
+        function lap() { laps.innerHTML += `<li>${formatTime()}</li>`; }
+    </script>
+</body>
+</html>
